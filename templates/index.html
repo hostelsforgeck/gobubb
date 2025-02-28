@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoBubb - Your Convenient Car Care System</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/gobubb_logo_1.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Global Styles */
+:root {
+    --primary: #2c7be5;
+    --primary-light: #4a8dec;
+    --primary-dark: #1f5aa8;
+    --secondary: #6c757d;
+    --dark: #343a40;
+    --light: #f8f9fa;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --white: #ffffff;
+    --gray-100: #f8f9fa;
+    --gray-200: #e9ecef;
+    --gray-300: #dee2e6;
+    --gray-400: #ced4da;
+    --gray-500: #adb5bd;
+    --gray-600: #868e96;
+    --gray-700: #495057;
+    --gray-800: #343a40;
+    --gray-900: #212529;
+    --font-primary: 'Poppins', sans-serif;
+    --font-secondary: 'Montserrat', sans-serif;
+    --transition: all 0.3s ease;
+    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    --border-radius: 0.375rem;
+    --border-radius-lg: 0.5rem;
+    --border-radius-sm: 0.25rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: var(--font-primary);
+    color: var(--gray-800);
+    line-height: 1.6;
+    overflow-x: hidden;
+    background-color: var(--gray-100);
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary);
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--primary-dark);
+}
+
+ul {
+    list-style: none;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+.logo {
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+}
+
+.logo span {
+    color: var(--primary);
+}
+
+.logo-icon {
+    margin-right: 0.5rem;
+    font-size: 2rem;
+    color: var(--primary);
+}
+
+/* Animation Classes */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeIn 0.8s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in:nth-child(1) { animation-delay: 0.2s; }
+.fade-in:nth-child(2) { animation-delay: 0.4s; }
+.fade-in:nth-child(3) { animation-delay: 0.6s; }
+.fade-in:nth-child(4) { animation-delay: 0.8s; }
+
+/* Header & Navigation */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.98);
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    transition: var(--transition);
+    backdrop-filter: blur(10px);
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-links a {
+    color: var(--gray-700);
+    font-weight: 500;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.nav-links a:hover {
+    color: var(--primary);
+}
+
+.nav-links a.active {
+    color: var(--primary);
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--primary);
+    transition: var(--transition);
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+.nav-action {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.login-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--primary);
+    border-radius: var(--border-radius);
+    color: var(--primary);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.login-btn:hover {
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+.signup-btn {
+    padding: 0.5rem 1rem;
+    background-color: var(--primary);
+    border-radius: var(--border-radius);
+    color: var(--white);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.signup-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+.mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 21px;
+    cursor: pointer;
+}
+
+.mobile-menu-btn span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--gray-800);
+    border-radius: 3px;
+    transition: var(--transition);
+}
+
+/* Landing Page Styles */
+.landing-page {
+    position: relative;
+}
+
+.background-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)), url('assets/background.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 6rem 1.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+    z-index: 2;
+}
+
+.hero h1 {
+    font-family: var(--font-secondary);
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--gray-900);
+    letter-spacing: -1px;
+}
+
+.hero h1 span {
+    color: var(--primary);
+}
+
+.slogan {
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    color: var(--gray-700);
+}
+
+.subtitle {
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    color: var(--gray-600);
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.cta-button {
+    display: inline-block;
+    background-color: var(--primary);
+    color: var(--white);
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.cta-button:hover {
+    background-color: var(--primary-dark);
+    color: var(--white);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+.cta-secondary {
+    display: inline-block;
+    background-color: var(--white);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    font-weight: 600;
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+.cta-secondary:hover {
+    background-color: var(--gray-100);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+}
+
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+}
+
+.stat-item {
+    text-align: center;
+}
+
+.stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: var(--gray-600);
+    font-weight: 500;
+}
+/* Enhanced Bubble Animation */
+.hero-bubbles {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.bubble {
+    position: absolute;
+    bottom: -100px;
+    border-radius: 50%;
+    animation: rise 15s infinite;
+    opacity: 0;
+    /* Add realistic bubble appearance */
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(7, 75, 163, 0.1));
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), inset 0 0 20px rgba(58, 155, 225, 0.401);
+    /* Add subtle border for more realism */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Create more varied bubble sizes and speeds */
+.bubble:nth-child(1) {
+    width: 40px;
+    height: 40px;
+    left: 10%;
+    animation-duration: 12s;
+    animation-delay: 0s;
+}
+
+.bubble:nth-child(2) {
+    width: 60px;
+    height: 60px;
+    left: 30%;
+    animation-duration: 16s;
+    animation-delay: 1s;
+}
+
+.bubble:nth-child(3) {
+    width: 25px;
+    height: 25px;
+    left: 50%;
+    animation-duration: 13s;
+    animation-delay: 2s;
+}
+
+.bubble:nth-child(4) {
+    width: 80px;
+    height: 80px;
+    left: 70%;
+    animation-duration: 18s;
+    animation-delay: 3s;
+}
+
+.bubble:nth-child(5) {
+    width: 50px;
+    height: 50px;
+    left: 85%;
+    animation-duration: 14s;
+    animation-delay: 4s;
+}
+
+.bubble:nth-child(6) {
+    width: 35px;
+    height: 35px;
+    left: 15%;
+    animation-duration: 15s;
+    animation-delay: 5s;
+}
+
+/* Add more bubbles for a richer effect */
+.bubble:nth-child(7) {
+    width: 45px;
+    height: 45px;
+    left: 25%;
+    animation-duration: 17s;
+    animation-delay: 2.5s;
+}
+
+.bubble:nth-child(8) {
+    width: 30px;
+    height: 30px;
+    left: 65%;
+    animation-duration: 14s;
+    animation-delay: 0.5s;
+}
+
+.bubble:nth-child(9) {
+    width: 55px;
+    height: 55px;
+    left: 40%;
+    animation-duration: 19s;
+    animation-delay: 3.5s;
+}
+
+.bubble:nth-child(10) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+
+.bubble:nth-child(11) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+
+.bubble:nth-child(12) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+
+.bubble:nth-child(13) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+
+.bubble:nth-child(14) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+
+.bubble:nth-child(15) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+
+.bubble:nth-child(16) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+
+.bubble:nth-child(17) {
+    width: 20px;
+    height: 20px;
+    left: 80%;
+    animation-duration: 11s;
+    animation-delay: 1.5s;
+}
+
+
+/* Enhanced rise animation with slight wobble for realistic movement */
+@keyframes rise {
+    0% {
+        opacity: 0;
+        transform: translateY(0) translateX(0) rotate(0);
+    }
+    10% {
+        opacity: 0.7;
+    }
+    50% {
+        opacity: 0.6;
+        transform: translateY(-400px) translateX(-15px) rotate(120deg);
+    }
+    75% {
+        opacity: 0.4;
+        transform: translateY(-600px) translateX(15px) rotate(180deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-800px) translateX(-5px) rotate(240deg);
+    }
+}
+.features {
+    padding: 5rem 0;
+    background-color: var(--white);
+    position: relative;
+    z-index: 3;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 1rem;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: var(--gray-600);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.feature-card {
+    background-color: var(--white);
+    padding: 2.5rem 2rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--gray-200);
+}
+
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: var(--primary);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.5rem;
+    background-color: rgba(44, 123, 229, 0.1);
+    border-radius: 50%;
+    color: var(--primary);
+    transition: var(--transition);
+}
+
+.feature-card:hover .feature-icon {
+    background-color: var(--primary);
+    color: var(--white);
+    transform: scale(1.1);
+}
+
+.feature-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--gray-800);
+}
+
+.feature-card p {
+    color: var(--gray-600);
+    margin-bottom: 1.5rem;
+}
+
+.feature-link {
+    font-weight: 500;
+    color: var(--primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.feature-link svg {
+    transition: var(--transition);
+}
+
+.feature-link:hover svg {
+    transform: translateX(5px);
+}
+
+/* How It Works Section */
+.how-it-works {
+    padding: 5rem 0;
+    background-color: var(--gray-100);
+}
+
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.step {
+    display: flex;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.step:last-child {
+    margin-bottom: 0;
+}
+
+.step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary);
+    color: var(--white);
+    border-radius: 50%;
+    font-weight: 600;
+    font-size: 1.25rem;
+    margin-right: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.step:not(:last-child) .step-number::after {
+    content: '';
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: calc(100% + 3rem);
+    background-color: var(--gray-300);
+    z-index: 1;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--gray-800);
+}
+
+.step-description {
+    color: var(--gray-600);
+}
+
+/* Testimonials */
+.testimonials {
+    padding: 5rem 0;
+    background-color: var(--white);
+}
+
+.testimonials-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.testimonial-card {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+    position: relative;
+    border: 1px solid var(--gray-200);
+}
+
+.testimonial-content {
+    font-size: 1.1rem;
+    color: var(--gray-700);
+    font-style: italic;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.testimonial-content::before {
+    content: """;
+    position: absolute;
+    left: 0;
+    top: -10px;
+    font-size: 3rem;
+    color: var(--primary);
+    font-family: serif;
+    line-height: 1;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 1rem;
+    background-color: var(--gray-300);
+}
+
+.author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.author-info h4 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+    color: var(--gray-800);
+}
+
+.author-info p {
+    font-size: 0.9rem;
+    color: var(--gray-600);
+}
+
+.rating {
+    display: flex;
+    margin-top: 0.5rem;
+}
+
+.star {
+    color: var(--warning);
+    margin-right: 0.25rem;
+}
+
+/* CTA Section */
+.cta-section {
+    padding: 5rem 0;
+    background-color: var(--primary);
+    color: var(--white);
+    text-align: center;
+}
+
+.cta-section .section-title {
+    color: var(--white);
+}
+
+.cta-section .section-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 2.5rem;
+}
+
+.cta-white {
+    background-color: var(--white);
+    color: var(--primary);
+    font-weight: 600;
+    padding: 1rem 2.5rem;
+    border-radius: var(--border-radius);
+    display: inline-block;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.cta-white:hover {
+    background-color: var(--light);
+    color: var(--primary-dark);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Footer */
+footer {
+    background-color: var(--gray-800);
+    color: var(--white);
+    padding: 4rem 0 2rem;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.footer-logo {
+    margin-bottom: 1rem;
+}
+
+.footer-logo .logo {
+    color: var(--white);
+    margin-bottom: 1rem;
+}
+
+.footer-description {
+    color: var(--gray-400);
+    margin-bottom: 1.5rem;
+}
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: var(--white);
+    transition: var(--transition);
+}
+
+.social-link:hover {
+    background-color: var(--primary);
+    transform: translateY(-3px);
+}
+
+footer h4 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: var(--white);
+}
+
+.footer-links ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.footer-links ul a {
+    color: var(--gray-400);
+    transition: var(--transition);
+}
+
+.footer-links ul a:hover {
+    color: var(--white);
+    transform: translateX(5px);
+}
+
+.footer-contact p {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--gray-400);
+}
+
+.footer-newsletter p {
+    color: var(--gray-400);
+    margin-bottom: 1rem;
+}
+
+.newsletter-form {
+    display: flex;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    font-family: var(--font-primary);
+    font-size: 1rem;
+}
+
+.newsletter-form button {
+    padding: 0.75rem 1rem;
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.newsletter-form button:hover {
+    background-color: var(--primary-dark);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--gray-500);
+}
+
+/* Responsive */
+@media screen and (max-width: 992px) {
+    .hero h1 {
+        font-size: 3.5rem;
+    }
+    
+    .feature-card {
+        padding: 2rem 1.5rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .nav-links, .nav-action {
+        display: none;
+    }
+    
+    .mobile-menu-btn {
+        display: flex;
+    }
+    
+    .hero h1 {
+        font-size: 3rem;
+    }
+    
+    .slogan {
+        font-size: 1.2rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .hero-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    
+    .step {
+        flex-direction: column;
+    }
+    
+    .step-number {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .step:not(:last-child) .step-number::after {
+        left: 25px;
+        top: 50px;
+        height: calc(100% + 2rem);
+        width: 2px;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+}
+    </style>
+
+</head>
+<body class="landing-page">
+    <div class="background-overlay"></div>
+    <header>
+        <nav>
+            <div class="logo">
+                <span>Go</span>Bubb
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="listings.html">Car Washes</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="fade-in"><span>Go</span>Bubb</h1>
+                <p class="slogan fade-in">Your Convenient Car Care System</p>
+                <p class="subtitle fade-in">Find the best car wash services near you with just a few clicks</p>
+                <a href="/listings" class="cta-button fade-in">Find Car Washes</a>
+            </div>
+            <div class="hero-bubbles">
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+                <div class="bubble"></div>
+            </div>
+        </section>
+
+        <section class="features">
+            <div class="container">
+                <h2>Why Choose GoBubb?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="12" y1="8" x2="12" y2="12"/>
+                                <line x1="12" y1="16" x2="12.01" y2="16"/>
+                            </svg>
+                        </div>
+                        <h3>Find Easily</h3>
+                        <p>Discover car wash services in your area with detailed information and photos.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            </svg>
+                        </div>
+                        <h3>Top Rated</h3>
+                        <p>Browse user reviews and ratings to find the best car wash services.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <h3>Save Time</h3>
+                        <p>Compare prices, services, and locations to make the best choice quickly.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo">
+                        <span>Go</span>Bubb
+                    </div>
+                    <p>Your Convenient Car Care System</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="listings.html">Car Washes</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p>Email: info@gobubb.com</p>
+                    <p>Phone: (555) 123-4567</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GoBubb. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script >
+
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Wash Listings - GoBubb</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/gobubb_logo_1.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base Styles */
+:root {
+  --primary-color: #3498db;
+  --primary-dark: #2980b9;
+  --secondary-color: #2ecc71;
+  --text-color: #333;
+  --light-gray: #f8f9fa;
+  --medium-gray: #e0e0e0;
+  --dark-gray: #777;
+  --white: #fff;
+  --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.07);
+  --card-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s ease;
+  --border-radius: 12px;
+  --card-border-radius: 16px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  color: var(--text-color);
+  line-height: 1.6;
+  background-color: var(--light-gray);
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+a {
+  text-decoration: none;
+  color: var(--text-color);
+  transition: var(--transition);
+}
+
+ul {
+  list-style: none;
+}
+
+/* Header Styles */
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.97);
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    transition: var(--transition);
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.nav-links {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-links a {
+    color: var(--gray-700);
+    font-weight: 500;
+    position: relative;
+    padding: 0.5rem 0;
+}
+
+.logo {
+    font-family: var(--font-secondary);
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--dark);
+}
+
+.logo span {
+    color: rgb(94, 94, 231);
+}
+
+
+.nav-links {
+  display: flex;
+  gap: 30px;
+}
+
+.nav-links li a {
+  font-weight: 500;
+  padding: 10px 0;
+  position: relative;
+  font-size: 16px;
+}
+
+.nav-links li a:hover {
+  color: var(--primary-color);
+}
+
+.nav-links li a.active {
+  color: var(--primary-color);
+}
+
+.nav-links li a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: var(--primary-color);
+  transition: width 0.3s ease;
+}
+
+.nav-links li a:hover::after,
+.nav-links li a.active::after {
+  width: 100%;
+}
+
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.mobile-menu-btn span {
+  display: block;
+  width: 30px;
+  height: 3px;
+  background-color: var(--primary-dark);
+  transition: var(--transition);
+}
+
+/* Hero Section */
+.listings-hero {
+  background: linear-gradient(135deg, rgba(52, 152, 219, 0.9), rgba(46, 204, 113, 0.9)), 
+              url('https://placehold.co/1200x400') no-repeat center center/cover;
+  padding: 100px 0 120px;
+  color: var(--white);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.listings-hero::before {
+  content: '';
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: var(--light-gray);
+  clip-path: ellipse(50% 60% at 50% 100%);
+}
+
+.listings-hero h1 {
+  font-size: 52px;
+  margin-bottom: 30px;
+  font-weight: 700;
+  text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  letter-spacing: -0.5px;
+}
+
+.search-filter-container {
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  box-shadow: var(--box-shadow);
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  transform: translateY(60px);
+}
+
+.search-bar {
+  display: flex;
+  margin-bottom: 25px;
+}
+
+.search-bar input {
+  flex: 1;
+  padding: 18px 20px;
+  border: 1px solid var(--medium-gray);
+  border-radius: 12px 0 0 12px;
+  font-size: 16px;
+  outline: none;
+  transition: var(--transition);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.search-bar input:focus {
+  border-color: var(--primary-color);
+}
+
+.search-bar button {
+  background-color: var(--primary-color);
+  color: var(--white);
+  border: none;
+  padding: 0 25px;
+  border-radius: 0 12px 12px 0;
+  cursor: pointer;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.search-bar button:hover {
+  background-color: var(--primary-dark);
+}
+
+.filter-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.filter-group select {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid var(--medium-gray);
+  border-radius: 12px;
+  background-color: var(--white);
+  font-size: 16px;
+  outline: none;
+  transition: var(--transition);
+  cursor: pointer;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+}
+
+.filter-group select:focus {
+  border-color: var(--primary-color);
+}
+
+/* Listings Section */
+.listings-container {
+  padding: 100px 0 80px;
+}
+
+.listings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 30px;
+}
+
+.listing-card {
+  background-color: var(--white);
+  border-radius: var(--card-border-radius);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: var(--transition);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.listing-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+}
+
+.listing-img {
+  height: 220px;
+  overflow: hidden;
+  position: relative;
+}
+
+.listing-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.listing-card:hover .listing-img img {
+  transform: scale(1.05);
+}
+
+.listing-price {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: var(--primary-color);
+  color: var(--white);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  font-size: 15px;
+}
+
+.listing-content {
+  padding: 24px;
+}
+
+.listing-title {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #222;
+}
+
+.listing-location {
+  color: var(--dark-gray);
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+}
+
+.listing-features {
+  margin-bottom: 18px;
+  color: #555;
+  font-size: 15px;
+  background-color: rgba(52, 152, 219, 0.08);
+  padding: 10px 14px;
+  border-radius: 8px;
+  line-height: 1.5;
+}
+
+.listing-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.listing-rating span {
+  color: #f39c12;
+  font-weight: 500;
+}
+
+.listing-button {
+  display: block;
+  background-color: var(--primary-color);
+  color: var(--white);
+  text-align: center;
+  padding: 14px 0;
+  border-radius: 12px;
+  font-weight: 500;
+  transition: var(--transition);
+  letter-spacing: 0.2px;
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.25);
+}
+
+.listing-button:hover {
+  background-color: var(--primary-dark);
+  box-shadow: 0 6px 15px rgba(52, 152, 219, 0.35);
+  transform: translateY(-2px);
+}
+
+/* Footer Styles */
+footer {
+  background-color: #2c3e50;
+  color: var(--white);
+  padding: 70px 0 20px;
+  position: relative;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.footer-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 50px;
+  margin-bottom: 50px;
+}
+
+.footer-logo {
+  flex: 1;
+  min-width: 250px;
+}
+
+.footer-logo .logo {
+  margin-bottom: 20px;
+  color: var(--white);
+}
+
+.footer-links, .footer-contact {
+  flex: 1;
+  min-width: 250px;
+}
+
+footer h4 {
+  font-size: 20px;
+  margin-bottom: 25px;
+  position: relative;
+  padding-bottom: 12px;
+  font-weight: 600;
+}
+
+footer h4::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 3px;
+  background-color: var(--secondary-color);
+}
+
+.footer-links ul li {
+  margin-bottom: 12px;
+}
+
+.footer-links ul li a {
+  color: #bdc3c7;
+  transition: var(--transition);
+  display: inline-block;
+}
+
+.footer-links ul li a:hover {
+  color: var(--secondary-color);
+  transform: translateX(5px);
+}
+
+.footer-contact p {
+  margin-bottom: 12px;
+  color: #bdc3c7;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 15px;
+  color: #bdc3c7;
+}
+
+/* Sample listing cards - To be used in the JavaScript */
+.sample-listing {
+  display: none; /* Hidden by default, will be shown via JavaScript */
+}
+
+/* No results */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 50px 20px;
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  font-size: 18px;
+  color: var(--dark-gray);
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  .nav-links {
+    display: none; /* Hide nav links on mobile - to be shown via JS */
+  }
+  
+  .mobile-menu-btn {
+    display: flex;
+  }
+  
+  .listings-hero h1 {
+    font-size: 36px;
+  }
+  
+  .filter-container {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .filter-group {
+    width: 100%;
+  }
+  
+  .footer-content {
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .search-filter-container {
+    padding: 20px;
+  }
+
+  .listings-hero {
+    padding: 80px 0 100px;
+  }
+}
+
+/* Mobile menu active state (for JavaScript) */
+.nav-links.active {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  background-color: var(--white);
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  text-align: center;
+  z-index: 100;
+}
+
+/* Animation for listings (to be used with JavaScript) */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(25px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+    </style>
+</head>
+<body class="listings-page">
+    <header>
+        <nav>
+            <div class="logo">
+                <span>Go</span>Bubb
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="listings.html" class="active">Car Washes</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="listings-hero">
+            <div class="container">
+                <h1>Find the Perfect Car Wash</h1>
+                <div class="search-filter-container">
+                    <div class="search-bar">
+                        <input type="text" id="search-input" placeholder="Search car washes or features...">
+                        <button id="search-button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="filter-container">
+                        <div class="filter-group">
+                            <label for="location-filter">Location:</label>
+                            <select id="location-filter">
+                                <option value="all">All Locations</option>
+                                <option value="downtown">Downtown</option>
+                                <option value="eastside">Eastside</option>
+                                <option value="westside">Westside</option>
+                                <option value="northside">Northside</option>
+                                <option value="southside">Southside</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="price-filter">Price Range:</label>
+                            <select id="price-filter">
+                                <option value="all">All Prices</option>
+                                <option value="$">$ (Budget)</option>
+                                <option value="$$">$$ (Standard)</option>
+                                <option value="$$$">$$$ (Premium)</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="rating-filter">Rating:</label>
+                            <select id="rating-filter">
+                                <option value="all">All Ratings</option>
+                                <option value="5">5 Stars</option>
+                                <option value="4">4+ Stars</option>
+                                <option value="3">3+ Stars</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="listings-container">
+            <div class="container">
+                <div class="listings-grid" id="listings-grid">
+                    <!-- Listings will be dynamically populated here -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div class="logo">
+                        <span>Go</span>Bubb
+                    </div>
+                    <p>Your Convenient Car Care System</p>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="listings.html">Car Washes</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-contact">
+                    <h4>Contact Us</h4>
+                    <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                            <polyline points="22,6 12,13 2,6"></polyline>
+                        </svg>
+                        info@gobubb.com
+                    </p>
+                    <p>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                        </svg>
+                        (555) 123-4567
+                    </p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 GoBubb. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Mobile menu toggle
+    const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('active');
+            const spans = this.querySelectorAll('span');
+            spans[0].style.transform = navLinks.classList.contains('active') ? 'rotate(45deg) translate(5px, 6px)' : '';
+            spans[1].style.opacity = navLinks.classList.contains('active') ? '0' : '1';
+            spans[2].style.transform = navLinks.classList.contains('active') ? 'rotate(-45deg) translate(5px, -6px)' : '';
+        });
+    }
+    
+    // Sample data for car wash listings
+    const carWashListings = [
+        {
+            id: 1,
+            title: "Crystal Clean Auto Spa",
+            image: "https://placehold.co/600x400/3498db/ffffff?text=Crystal+Clean",
+            location: "Downtown",
+            address: "123 Main St, Downtown",
+            price: "$$",
+            rating: 4.8,
+            features: ["Hand Wash", "Interior Cleaning", "Waxing"]
+        },
+        {
+            id: 2,
+            title: "Bubble Bath Express",
+            image: "https://placehold.co/600x400/2ecc71/ffffff?text=Bubble+Bath",
+            location: "Eastside",
+            address: "456 Oak Ave, Eastside",
+            price: "$",
+            rating: 4.2,
+            features: ["Express Wash", "Self-Service", "Vacuum Stations"]
+        },
+        {
+            id: 3,
+            title: "Premium Auto Detail",
+            image: "https://placehold.co/600x400/e74c3c/ffffff?text=Premium+Detail",
+            location: "Westside",
+            address: "789 Elm Blvd, Westside",
+            price: "$$$",
+            rating: 4.9,
+            features: ["Full Detail", "Steam Cleaning", "Ceramic Coating"]
+        },
+        {
+            id: 4,
+            title: "Quick & Clean Car Wash",
+            image: "https://placehold.co/600x400/f39c12/ffffff?text=Quick+Clean",
+            location: "Northside",
+            address: "321 Pine Rd, Northside",
+            price: "$",
+            rating: 4.0,
+            features: ["Drive-Through", "Basic Wash", "Air Freshener"]
+        },
+        {
+            id: 5,
+            title: "Eco Friendly Auto Wash",
+            image: "https://placehold.co/600x400/9b59b6/ffffff?text=Eco+Friendly",
+            location: "Southside",
+            address: "654 Maple St, Southside",
+            price: "$$",
+            rating: 4.7,
+            features: ["Eco-Friendly", "Water Recycling", "Organic Products"]
+        },
+        {
+            id: 6,
+            title: "Deluxe Car Salon",
+            image: "https://placehold.co/600x400/1abc9c/ffffff?text=Deluxe+Salon",
+            location: "Downtown",
+            address: "987 Central Ave, Downtown",
+            price: "$$$",
+            rating: 4.5,
+            features: ["Premium Service", "Paint Correction", "Interior Detailing"]
+        }
+    ];
+    
+    // Render car wash listings
+    function renderListings(listings) {
+        const listingsGrid = document.getElementById('listings-grid');
+        listingsGrid.innerHTML = '';
+        
+        if (listings.length === 0) {
+            listingsGrid.innerHTML = '<div class="no-results">No car washes match your search criteria. Please try different filters.</div>';
+            return;
+        }
+        
+        listings.forEach((listing, index) => {
+            const card = document.createElement('div');
+            card.className = 'listing-card fade-in';
+            card.style.animationDelay = `${index * 0.1}s`;
+            
+            const stars = generateStars(listing.rating);
+            const features = listing.features.join(' • ');
+            
+            card.innerHTML = `
+                <div class="listing-img">
+                    <img src="${listing.image}" alt="${listing.title}">
+                    <div class="listing-price">${listing.price}</div>
+                </div>
+                <div class="listing-content">
+                    <h3 class="listing-title">${listing.title}</h3>
+                    <div class="listing-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        ${listing.address}
+                    </div>
+                    <div class="listing-features">${features}</div>
+                    <div class="listing-rating">
+                        ${stars}
+                        <span>(${listing.rating})</span>
+                    </div>
+                    <a href="/details" class="listing-button">Book Now</a>
+                </div>
+            `;
+            
+            listingsGrid.appendChild(card);
+        });
+    }
+    
+    // Generate star ratings
+    function generateStars(rating) {
+        let stars = '';
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5;
+        
+        for (let i = 0; i < fullStars; i++) {
+            stars += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#f39c12" stroke="#f39c12" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+        }
+        
+        if (halfStar) {
+            stars += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="#f39c12" stroke="#f39c12" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill-opacity="0.5"></polygon></svg>';
+        }
+        
+        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+        for (let i = 0; i < emptyStars; i++) {
+            stars += '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#f39c12" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>';
+        }
+        
+        return stars;
+    }
+    
+    // Filter listings based on user input
+    function filterListings() {
+        const searchInput = document.getElementById('search-input').value.toLowerCase();
+        const locationFilter = document.getElementById('location-filter').value;
+        const priceFilter = document.getElementById('price-filter').value;
+        const ratingFilter = parseInt(document.getElementById('rating-filter').value) || 0;
+        
+        const filteredListings = carWashListings.filter(listing => {
+            // Search filter
+            const matchesSearch = 
+                listing.title.toLowerCase().includes(searchInput) || 
+                listing.address.toLowerCase().includes(searchInput) ||
+                listing.features.some(feature => feature.toLowerCase().includes(searchInput));
+            
+            // Location filter
+            const matchesLocation = 
+                locationFilter === 'all' || 
+                listing.location.toLowerCase() === locationFilter.toLowerCase();
+            
+            // Price filter
+            const matchesPrice = 
+                priceFilter === 'all' || 
+                listing.price === priceFilter;
+            
+            // Rating filter
+            const matchesRating = listing.rating >= ratingFilter;
+            
+            return matchesSearch && matchesLocation && matchesPrice && matchesRating;
+        });
+        
+        renderListings(filteredListings);
+    }
+    
+    // Event listeners for search and filters
+    document.getElementById('search-button').addEventListener('click', filterListings);
+    document.getElementById('search-input').addEventListener('keyup', function(event) {
+        if (event.key === 'Enter') {
+            filterListings();
+        }
+    });
+    
+    document.getElementById('location-filter').addEventListener('change', filterListings);
+    document.getElementById('price-filter').addEventListener('change', filterListings);
+    document.getElementById('rating-filter').addEventListener('change', filterListings);
+    
+    // Initial render
+    renderListings(carWashListings);
+});
+    </script>
+</body>
+</html>
