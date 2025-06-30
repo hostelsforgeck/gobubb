@@ -1244,7 +1244,7 @@
                                     <option value="16:00">4:00 PM</option>
                                     <option value="17:00">5:00 PM</option>
                                 </select>
-                                <button class="book-button">Book Now</button>
+                                <button class="book-button" id="call-button">Book Now</button>
                             </div>
                         </div>
 
@@ -1337,6 +1337,12 @@
             </div>
         </div>
     </footer>
+
+        <script>
+    document.getElementById("call-button").addEventListener("click", function() {
+        window.location.href = "tel:9876543210";
+    });
+    </script>
 
     <script>
         // Car wash data - In a real application, this would come from an API
@@ -1639,34 +1645,6 @@
                     // Hide button if all reviews are shown
                     if (visibleReviews >= reviews.length) {
                         this.style.display = 'none';
-                    }
-                });
-            }
-
-            // Book now button
-            const bookButton = document.querySelector('.book-button');
-
-            if (bookButton) {
-                bookButton.addEventListener('click', function () {
-                    const service = document.getElementById('service-select').value;
-                    const date = document.getElementById('date-select').value;
-                    const time = document.getElementById('time-select').value;
-                    const phoneNumber = '9876543210'; // Without country code
-                    const countryCode = '91'; // Add your country code here, e.g., '91' for India
-
-                    // Show confirmation
-                    alert(`Booking confirmed!\n\nService: ${service}\nDate: ${date}\nTime: ${time}`);
-
-                    // Detect mobile
-                    const isMobile = /Mobi|Android|iPhone/i.test(navigator.userAgent);
-
-                    if (isMobile) {
-                        // Open phone dialer
-                        window.location.href = `tel:${phoneNumber}`;
-                    } else {
-                        // Open WhatsApp Web on laptop/desktop
-                        const whatsappURL = `https://web.whatsapp.com/send?phone=${countryCode}${phoneNumber}`;
-                        window.open(whatsappURL, '_blank');
                     }
                 });
             }
